@@ -1,154 +1,205 @@
-// Inicializar paneles con animación de entrada
-document.addEventListener('DOMContentLoaded', function() {
-    const panels = document.querySelectorAll('.panel');
-    
-    panels.forEach((panel, index) => {
-        panel.style.opacity = '0';
-        panel.style.transform = 'translateY(50px)';
-        
-        setTimeout(() => {
-            panel.style.transition = 'all 0.6s ease';
-            panel.style.opacity = '1';
-            panel.style.transform = 'translateY(0)';
-        }, index * 200);
-    });
-});// Añadir interactividad a los paneles
-document.addEventListener('DOMContentLoaded', function() {
-    // Efecto de click en paneles
-    document.querySelectorAll('.panel').forEach(panel => {
-        panel.addEventListener('click', function() {
-            this.style.transform = 'rotateY(10deg) scale(1.1)';
-            setTimeout(() => {
-                this.style.transform = 'rotateY(0deg) scale(1)';
-            }, 200);
-        });
-    });
+// Translation demo functionality
+const translations = {
+    dramatic: [
+        "¡Humano! Mi plato está vacío desde hace 3 minutos eternos. ¡Esto es una tragedia de proporciones épicas!",
+        "¡Por todos los ratones sagrados! ¿Acaso no ves que necesito atención AHORA MISMO?",
+        "¡Oh, el drama! ¡La puerta está cerrada y mi libertad ha sido coartada!"
+    ],
+    sweet: [
+        "Buenos días mi humano favorito, ¿podrías por favor llenar mi platito? Te quiero mucho ❤️",
+        "Hola papá/mamá, solo quería decirte que eres el mejor y me encantan tus caricias",
+        "¿Podrías abrir la puerta por favor? Prometo ser un gatito muy bueno"
+    ],
+    sarcastic: [
+        "Oh, qué sorpresa... mi plato está vacío. Otra vez. Definitivamente no es la hora del desayuno...",
+        "Genial, otra vez ignorando mis necesidades básicas. Excelente servicio a 5 estrellas.",
+        "Sí, sí, sigue con lo tuyo. No es como si yo fuera la mascota aquí o algo así..."
+    ],
+    wise: [
+        "Joven padawan, el camino hacia la iluminación felina pasa por un plato lleno de comida.",
+        "En mis nueve vidas he aprendido que la paciencia es una virtud... pero mi plato sigue vacío.",
+        "La sabiduría ancestral felina dice: 'Un gato bien alimentado es un gato en paz con el universo'."
+    ],
+    baby: [
+        "¡Mami! ¡Papi! ¡Tengo mucha hambre y quiero mi comidita rica!",
+        "¿Dónde está mi lechita? ¡Soy un bebé gatito muy pequeñito!",
+        "¡Quiero jugar! ¡Quiero cariñitos! ¡Soy el gatito más lindo del mundo!"
+    ]
+};
 
-    // Iniciar efectos después de cargar
-    setTimeout(addFloatingMeows, 1000);
-});
+let currentStyle = 'dramatic';
+let isRecording = false;
 
-// Efecto de maullidos aleatorios en lugar de gatos flotantes
-function addFloatingMeows() {
-    const meows = ['Meow!', 'Miau!', '😸', 'Purr~', '🐱', 'Mrow!', '😺'];
-    const container = document.body;
+// Floating cats animation
+function createFloatingCats() {
+    const container = document.getElementById('floatingCats');
+    const cats = ['🐱', '😸', '😺', '😻', '🙀', '😿', '😾'];
     
     setInterval(() => {
-        const meow = document.createElement('div');
-        meow.textContent = meows[Math.floor(Math.random() * meows.length)];
-        meow.style.position = 'fixed';
-        meow.style.left = Math.random() * window.innerWidth + 'px';
-        meow.style.top = '-50px';
-        meow.style.fontSize = Math.random() * 1.5 + 1 + 'rem';
-        meow.style.pointerEvents = 'none';
-        meow.style.zIndex = '1000';
-        meow.style.transition = 'all 4s linear';
-        meow.style.opacity = '0.8';
-        meow.style.color = '#f39c12';
-        meow.style.fontWeight = 'bold';
-        meow.style.textShadow = '2px 2px 4px rgba(0,0,0,0.3)';
+        const cat = document.createElement('div');
+        cat.className = 'cat-icon';
+        cat.textContent = cats[Math.floor(Math.random() * cats.length)];
+        cat.style.left = Math.random() * 100 + '%';
+        cat.style.animationDuration = (Math.random() * 10 + 15) + 's';
+        cat.style.opacity = Math.random() * 0.5 + 0.1;
         
-        container.appendChild(meow);
+        container.appendChild(cat);
         
         setTimeout(() => {
-            meow.style.top = window.innerHeight + 'px';
-            meow.style.opacity = '0';
-            meow.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
-        }, 100);
-        
-        setTimeout(() => {
-            if (container.contains(meow)) {
-                container.removeChild(meow);
+            if (cat.parentNode) {
+                cat.parentNode.removeChild(cat);
             }
-        }, 4000);
-    }, 3000);
+        }, 25000);
+    }, 2000);
 }
 
-// Efecto de sonido simulado al hacer clic en paneles
-document.addEventListener('DOMContentLoaded', function() {
-    const featureItems = document.querySelectorAll('.feature-item');
-    
-    featureItems.forEach(item => {
-        item.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateX(5px) scale(1.02)';
-            this.style.boxShadow = '0 8px 25px rgba(243, 156, 18, 0.3)';
+// Style selector functionality
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.style-button').forEach(button => {
+        button.addEventListener('click', () => {
+            document.querySelectorAll('.style-button').forEach(b => b.classList.remove('active'));
+            button.classList.add('active');
+            currentStyle = button.dataset.style;
         });
-        
-        item.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateX(0) scale(1)';
-            this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
-        });
-    });
-
-    // Efecto especial para iconos de micrófono
-    const audioIcons = document.querySelectorAll('.panel-icon');
-    audioIcons.forEach(icon => {
-        if (icon.textContent.includes('🎤') || icon.textContent.includes('⚙️')) {
-            icon.classList.add('audio-icon');
-        }
     });
 });
 
-// Animación suave al hacer scroll
-window.addEventListener('scroll', function() {
-    const panels = document.querySelectorAll('.panel');
-    
-    panels.forEach(panel => {
-        const rect = panel.getBoundingClientRect();
-        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-        
-        if (isVisible) {
-            panel.style.opacity = '1';
-            panel.style.transform = 'translateY(0)';
+// Record button functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const recordBtn = document.getElementById('recordBtn');
+    const translationOutput = document.getElementById('translationOutput');
+
+    recordBtn.addEventListener('click', () => {
+        if (!isRecording) {
+            startRecording();
+        } else {
+            stopRecording();
         }
     });
-});
 
-// Simulador de traducción de maullidos
-function simulateTranslation() {
-    const translations = [
-        "¡Tengo hambre! 🍽️",
-        "Quiero jugar contigo 🎾",
-        "Necesito caricias 💝",
-        "Estoy aburrido 😴",
-        "¡Hay algo extraño afuera! 👀",
-        "Te amo, humano 💕",
-        "¿Dónde está mi juguete? 🧸",
-        "Necesito ir al baño 🚽"
-    ];
-    
-    return translations[Math.floor(Math.random() * translations.length)];
-}
-
-// Agregar funcionalidad demo al QR placeholder
-document.addEventListener('DOMContentLoaded', function() {
-    const qrPlaceholder = document.querySelector('.qr-placeholder');
-    if (qrPlaceholder) {
-        qrPlaceholder.addEventListener('click', function() {
-            const translation = simulateTranslation();
-            const tempDiv = document.createElement('div');
-            tempDiv.textContent = translation;
-            tempDiv.style.position = 'fixed';
-            tempDiv.style.top = '50%';
-            tempDiv.style.left = '50%';
-            tempDiv.style.transform = 'translate(-50%, -50%)';
-            tempDiv.style.background = '#f39c12';
-            tempDiv.style.color = 'white';
-            tempDiv.style.padding = '20px';
-            tempDiv.style.borderRadius = '10px';
-            tempDiv.style.fontSize = '1.2rem';
-            tempDiv.style.zIndex = '9999';
-            tempDiv.style.textAlign = 'center';
-            tempDiv.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
-            
-            document.body.appendChild(tempDiv);
-            
-            setTimeout(() => {
-                document.body.removeChild(tempDiv);
-            }, 2000);
-        });
+    function startRecording() {
+        isRecording = true;
+        recordBtn.classList.add('recording');
+        recordBtn.textContent = '⏹️';
+        translationOutput.innerHTML = '<em>🎤 Escuchando a tu gato...</em>';
         
-        qrPlaceholder.style.cursor = 'pointer';
-        qrPlaceholder.title = 'Click para ver traducción demo';
+        // Simulate recording for 2-3 seconds
+        setTimeout(stopRecording, 2000 + Math.random() * 1000);
     }
+
+    function stopRecording() {
+        isRecording = false;
+        recordBtn.classList.remove('recording');
+        recordBtn.textContent = '🎤';
+        
+        // Show translation
+        setTimeout(() => {
+            const styleTranslations = translations[currentStyle];
+            const randomTranslation = styleTranslations[Math.floor(Math.random() * styleTranslations.length)];
+            
+            translationOutput.innerHTML = `
+                <strong>🎵 Sonido detectado:</strong> "Miau miau miaauuu"<br>
+                <strong>📍 Contexto:</strong> ${getRandomContext()}<br><br>
+                <strong>💭 Traducción ${currentStyle}:</strong><br>
+                "${randomTranslation}"
+            `;
+        }, 1000);
+    }
+});
+
+function getRandomContext() {
+    const contexts = [
+        'Cocina, 7:30 AM, plato vacío',
+        'Sala, 3:20 PM, ventana abierta',
+        'Dormitorio, 11:45 PM, hora de dormir',
+        'Baño, 9:15 AM, agua corriendo',
+        'Entrada, 6:00 PM, llegada del humano'
+    ];
+    return contexts[Math.floor(Math.random() * contexts.length)];
+}
+
+// Scroll animations
+function handleScrollAnimations() {
+    const elements = document.querySelectorAll('.fade-in');
+    
+    elements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < window.innerHeight - elementVisible) {
+            element.classList.add('visible');
+        }
+    });
+}
+
+// Counter animation for stats
+function animateCounters() {
+    const counters = document.querySelectorAll('[data-target]');
+    
+    counters.forEach(counter => {
+        const target = parseInt(counter.dataset.target);
+        const increment = target / 100;
+        let current = 0;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                current = target;
+                clearInterval(timer);
+            }
+            counter.textContent = Math.floor(current);
+        }, 20);
+    });
+}
+
+// Smooth scrolling for anchor links
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+});
+
+// Initialize everything when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    createFloatingCats();
+    handleScrollAnimations();
+    
+    // Animate counters when they become visible
+    const statsSection = document.querySelector('.stats-section');
+    if (statsSection) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+        observer.observe(statsSection);
+    }
+});
+
+// Handle scroll events
+window.addEventListener('scroll', handleScrollAnimations);
+
+// Add interactivity to feature cards
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.feature-card').forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-10px) scale(1.02)';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0) scale(1)';
+        });
+    });
 });
