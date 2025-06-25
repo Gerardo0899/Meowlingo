@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeowLingo - Traduce a tu Gato</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="floating-cats" id="floatingCats"></div>
+        <div class="hero-content">
+            <div class="logo">🐱</div>
+            <h1>MeowLingo</h1>
+            <p>"Porque tu gato tiene algo que decir... y ahora puedes escucharlo"</p>
+            <a href="#demo" class="cta-button">¡Prueba la Demo!</a>
+        </div>
+    </section>
+
+    <!-- Translator Demo Section -->
+    <section class="section" id="demo">
+        <h2 class="section-title fade-in">🎵 Traductor Interactivo</h2>
+        <div class="translator-demo fade-in">
+            <div class="translator-interface">
+                <div class="audio-input">
+                    <button class="record-button" id="recordBtn">🎤</button>
+                    <div>
+                        <h3>Graba a tu gato o haz clic para una demo</h3>
+                        <p>Mantén presionado para grabar o haz clic para ver ejemplos</p>
+                    </div>
+                </div>
+                
+                <div class="style-selector">
+                    <button class="style-button active" data-style="dramatic">😱 Dramático</button>
+                    <button class="style-button" data-style="sweet">😊 Tierno</button>
+                    <button class="style-button" data-style="sarcastic">😏 Sarcástico</button>
+                    <button class="style-button" data-style="wise">🧙‍♂️ Sabio</button>
+                    <button class="style-button" data-style="baby">👶 Bebé</button>
+                </div>
+                
+                <div class="translation-output" id="translationOutput">
+                    <em>Haz clic en el botón de grabación para empezar...</em>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section">
+        <h2 class="section-title fade-in">✨ Características Principales</h2>
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🧠</div>
+                <h3>Inteligencia Artificial Avanzada</h3>
+                <p>Algoritmos de machine learning que analizan frecuencia, tono y contexto para una traducción precisa.</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🎭</div>
+                <h3>Múltiples Personalidades</h3>
+                <p>Elige entre 10+ estilos de traducción: dramático, tierno, sarcástico, sabio y muchos más.</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📊</div>
+                <h3>Estadísticas Detalladas</h3>
+                <p>Análisis completo del comportamiento de tu gato con patrones y tendencias personalizadas.</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🏠</div>
+                <h3>Análisis Contextual</h3>
+                <p>Considera hora del día, ubicación y situación para traducciones más precisas.</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🔒</div>
+                <h3>Privacidad Garantizada</h3>
+                <p>Cumplimiento total con la Ley de Protección de Datos. Tu información está segura.</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">👥</div>
+                <h3>Comunidad Social</h3>
+                <p>Comparte las traducciones más divertidas y conecta con otros amantes de los gatos.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Showcase -->
+    <section class="section">
+        <div class="product-showcase fade-in">
+            <h2>🎁 MeowLingo Pro - Smart Collar</h2>
+            <div class="collar-visual">💎</div>
+            <h3>¡Próximamente!</h3>
+            <p>Collar inteligente con micrófono de alta sensibilidad, batería de 7 días y conectividad Bluetooth 5.0. Traducción automática 24/7.</p>
+            <br>
+            <a href="#" class="cta-button">Pre-ordena por $79.99</a>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="section">
+            <h2 class="section-title fade-in">📈 Impacto Global</h2>
+            <div class="stats-grid">
+                <div class="stat-card fade-in">
+                    <div class="stat-number" data-target="600">0</div>
+                    <div>Millones de gatos globalmente</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-number" data-target="261">0</div>
+                    <div>Billones USD mercado Pet Care</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-number" data-target="15">0</div>
+                    <div>% Crecimiento anual Pet Tech</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-number" data-target="85">0</div>
+                    <div>% Precisión de traducción</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3>📱 Descarga MeowLingo</h3>
+            <p>Disponible en App Store y Google Play</p>
+            
+            <div class="social-links">
+                <a href="#" class="social-link">📱</a>
+                <a href="#" class="social-link">💻</a>
+                <a href="#" class="social-link">📧</a>
+                <a href="#" class="social-link">🐱</a>
+            </div>
+            
+            <p><strong>Desarrollado con ❤️ para los amantes de los gatos</strong></p>
+            <p>© 2024 MeowLingo. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
