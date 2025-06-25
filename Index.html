@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeowLingo - Traduce a tu Gato</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Animated gradient background */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #667eea, #764ba2, #5e35b1, #9c27b0);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating cat icons */
+        .floating-cats {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .cat-icon {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.3;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            to {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        .hero-content {
+            z-index: 10;
+            position: relative;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .logo {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Main content sections */
+        .section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #5e35b1;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        /* Interactive translator section */
+        .translator-demo {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 2rem 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .translator-interface {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .audio-input {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .record-button {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .record-button:hover {
+            transform: scale(1.1);
+        }
+
+        .record-button.recording {
+            animation: pulse 1s infinite;
+            background: linear-gradient(45deg, #ff4444, #ff6666);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .style-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .style-button {
+            padding: 10px 20px;
+            border: 2px solid #5e35b1;
+            background: white;
+            color: #5e35b1;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .style-button:hover,
+        .style-button.active {
+            background: #5e35b1;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .translation-output {
+            background: #f8f9ff;
+            border: 2px solid #e1e5fe;
+            border-radius: 10px;
+            padding: 1.5rem;
+            min-height: 100px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Feature cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: #5e35b1;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Product showcase */
+        .product-showcase {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .collar-visual {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(45deg, #2196f3, #21cbf3);
+            border-radius: 50%;
+            margin: 2rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            border: 5px solid rgba(255,255,255,0.3);
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Stats section */
+        .stats-section {
+            background: #f8f9ff;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem 1rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #5e35b1;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #37474f;
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .social-link {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .logo {
+                font-size: 3rem;
+            }
+            
+            .section {
+                padding: 2rem 1rem;
+            }
+            
+            .translator-demo {
+                padding: 1.5rem;
+            }
+            
+            .style-selector {
+                justify-content: center;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="floating-cats" id="floatingCats"></div>
+        <div class="hero-content">
+            <div class="logo">🐱</div>
+            <h1>MeowLingo</h1>
+            <p>"Porque tu gato tiene algo que decir... y ahora puedes escucharlo"</p>
+            <a href="#demo" class="cta-button">¡Prueba la Demo!</a>
+        </div>
+    </section>
+
+    <!-- Translator Demo Section -->
+    <section class="section" id="demo">
+        <h2 class="section-title fade-in">🎵 Traductor Interactivo</h2>
+        <div class="translator-demo fade-in">
+            <div class="translator-interface">
+                <div class="audio-input">
+                    <button class="record-button" id="recordBtn">🎤</button>
+                    <div>
+                        <h3>Graba a tu gato o haz clic para una demo</h3>
+                        <p>Mantén presionado para grabar o haz clic para ver ejemplos</p>
+                    </div>
+                </div>
+                
+                <div class="style-selector">
+                    <button class="style-button active" data-style="dramatic">😱 Dramático</button>
+                    <button class="style-button" data-style="sweet">😊 Tierno</button>
+                    <button class="style-button" data-style="sarcastic">😏 Sarcástico</button>
+                    <button class="style-button" data-style="wise">🧙‍♂️ Sabio</button>
+                    <button class="style-button" data-style="baby">👶 Bebé</button>
+                </div>
+                
+                <div class="translation-output" id="translationOutput">
+                    <em>Haz clic en el botón de grabación para empezar...</em>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section">
+        <h2 class="section-title fade-in">✨ Características Principales</h2>
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🧠</div>
+                <h3>Inteligencia Artificial Avanzada</h3>
+                <p>Algoritmos de machine learning que analizan frecuencia, tono y contexto para una traducción precisa.</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🎭</div>
+                <h3>Múltiples Personalidades</h3>
+                <p>Elige entre 10+ estilos de traducción: dramático, tierno, sarcástico, sabio y muchos más.</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📊</div>
+                <h3>Estadísticas Detalladas</h3>
+                <p>Análisis completo del comportamiento de tu gato con patrones y tendencias personalizadas.</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🏠</div>
+                <h3>Análisis Contextual</h3>
+                <p>Considera hora del día, ubicación y situación para traducciones más precisas.</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🔒</div>
+                <h3>Privacidad Garantizada</h3>
+                <p>Cumplimiento total con la Ley de Protección de Datos. Tu información está segura.</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">👥</div>
+                <h3>Comunidad Social</h3>
+                <p>Comparte las traducciones más divertidas y conecta con otros amantes de los gatos.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Showcase -->
+    <section class="section">
+        <div class="product-showcase fade-in">
+            <h2>🎁 MeowLingo Pro - Smart Collar</h2>
+            <div class="collar-visual">💎</div>
+            <h3>¡Próximamente!</h3>
+            <p>Collar inteligente con micrófono de alta sensibilidad, batería de 7 días y conectividad Bluetooth 5.0. Traducción automática 24/7.</p>
+            <br>
+            <a href="#" class="cta-button">Pre-ordena por $79.99</a>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="section">
+            <h2 class="section-title fade-in">📈 Impacto Global</h2>
+            <div class="stats-grid">
+                <div class="stat-card fade-in">
+                    <div class="stat-number" data-target="600">0</div>
+                    <div>Millones de gatos globalmente</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-number" data-target="261">0</div>
+                    <div>Billones USD mercado Pet Care</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-number" data-target="15">0</div>
+                    <div>% Crecimiento anual Pet Tech</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-number" data-target="85">0</div>
+                    <div>% Precisión de traducción</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3>📱 Descarga MeowLingo</h3>
+            <p>Disponible en App Store y Google Play</p>
+            
+            <div class="social-links">
+                <a href="#" class="social-link">📱</a>
+                <a href="#" class="social-link">💻</a>
+                <a href="#" class="social-link">📧</a>
+                <a href="#" class="social-link">🐱</a>
+            </div>
+            
+            <p><strong>Desarrollado con ❤️ para los amantes de los gatos</strong></p>
+            <p>© 2024 MeowLingo. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Floating cats animation
+        function createFloatingCats() {
+            const container = document.getElementById('floatingCats');
+            const cats = ['🐱', '😸', '😺', '😻', '🙀', '😿', '😾'];
+            
+            setInterval(() => {
+                const cat = document.createElement('div');
+                cat.className = 'cat-icon';
+                cat.textContent = cats[Math.floor(Math.random() * cats.length)];
+                cat.style.left = Math.random() * 100 + '%';
+                cat.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                cat.style.opacity = Math.random() * 0.5 + 0.1;
+                
+                container.appendChild(cat);
+                
+                setTimeout(() => {
+                    if (cat.parentNode) {
+                        cat.parentNode.removeChild(cat);
+                    }
+                }, 25000);
+            }, 2000);
+        }
+
+        // Translation demo functionality
+        const translations = {
+            dramatic: [
+                "¡Humano! Mi plato está vacío desde hace 3 minutos eternos. ¡Esto es una tragedia de proporciones épicas!",
+                "¡Por todos los ratones sagrados! ¿Acaso no ves que necesito atención AHORA MISMO?",
+                "¡Oh, el drama! ¡La puerta está cerrada y mi libertad ha sido coartada!"
+            ],
+            sweet: [
+                "Buenos días mi humano favorito, ¿podrías por favor llenar mi platito? Te quiero mucho ❤️",
+                "Hola papá/mamá, solo quería decirte que eres el mejor y me encantan tus caricias",
+                "¿Podrías abrir la puerta por favor? Prometo ser un gatito muy bueno"
+            ],
+            sarcastic: [
+                "Oh, qué sorpresa... mi plato está vacío. Otra vez. Definitivamente no es la hora del desayuno...",
+                "Genial, otra vez ignorando mis necesidades básicas. Excelente servicio a 5 estrellas.",
+                "Sí, sí, sigue con lo tuyo. No es como si yo fuera la mascota aquí o algo así..."
+            ],
+            wise: [
+                "Joven padawan, el camino hacia la iluminación felina pasa por un plato lleno de comida.",
+                "En mis nueve vidas he aprendido que la paciencia es una virtud... pero mi plato sigue vacío.",
+                "La sabiduría ancestral felina dice: 'Un gato bien alimentado es un gato en paz con el universo'."
+            ],
+            baby: [
+                "¡Mami! ¡Papi! ¡Tengo mucha hambre y quiero mi comidita rica!",
+                "¿Dónde está mi lechita? ¡Soy un bebé gatito muy pequeñito!",
+                "¡Quiero jugar! ¡Quiero cariñitos! ¡Soy el gatito más lindo del mundo!"
+            ]
+        };
+
+        let currentStyle = 'dramatic';
+        let isRecording = false;
+
+        // Style selector functionality
+        document.querySelectorAll('.style-button').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.style-button').forEach(b => b.classList.remove('active'));
+                button.classList.add('active');
+                currentStyle = button.dataset.style;
+            });
+        });
+
+        // Record button functionality
+        const recordBtn = document.getElementById('recordBtn');
+        const translationOutput = document.getElementById('translationOutput');
+
+        recordBtn.addEventListener('click', () => {
+            if (!isRecording) {
+                startRecording();
+            } else {
+                stopRecording();
+            }
+        });
+
+        function startRecording() {
+            isRecording = true;
+            recordBtn.classList.add('recording');
+            recordBtn.textContent = '⏹️';
+            translationOutput.innerHTML = '<em>🎤 Escuchando a tu gato...</em>';
+            
+            // Simulate recording for 2-3 seconds
+            setTimeout(stopRecording, 2000 + Math.random() * 1000);
+        }
+
+        function stopRecording() {
+            isRecording = false;
+            recordBtn.classList.remove('recording');
+            recordBtn.textContent = '🎤';
+            
+            // Show translation
+            setTimeout(() => {
+                const styleTranslations = translations[currentStyle];
+                const randomTranslation = styleTranslations[Math.floor(Math.random() * styleTranslations.length)];
+                
+                translationOutput.innerHTML = `
+                    <strong>🎵 Sonido detectado:</strong> "Miau miau miaauuu"<br>
+                    <strong>📍 Contexto:</strong> ${getRandomContext()}<br><br>
+                    <strong>💭 Traducción ${currentStyle}:</strong><br>
+                    "${randomTranslation}"
+                `;
+            }, 1000);
+        }
+
+        function getRandomContext() {
+            const contexts = [
+                'Cocina, 7:30 AM, plato vacío',
+                'Sala, 3:20 PM, ventana abierta',
+                'Dormitorio, 11:45 PM, hora de dormir',
+                'Baño, 9:15 AM, agua corriendo',
+                'Entrada, 6:00 PM, llegada del humano'
+            ];
+            return contexts[Math.floor(Math.random() * contexts.length)];
+        }
+
+        // Scroll animations
+        function handleScrollAnimations() {
+            const elements = document.querySelectorAll('.fade-in');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        // Counter animation for stats
+        function animateCounters() {
+            const counters = document.querySelectorAll('[data-target]');
+            
+            counters.forEach(counter => {
+                const target = parseInt(counter.dataset.target);
+                const increment = target / 100;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    counter.textContent = Math.floor(current);
+                }, 20);
+            });
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            createFloatingCats();
+            handleScrollAnimations();
+            
+            // Animate counters when they become visible
+            const statsSection = document.querySelector('.stats-section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounters();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+            observer.observe(statsSection);
+        });
+
+        // Handle scroll events
+        window.addEventListener('scroll', handleScrollAnimations);
+
+        // Add some interactivity to feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
